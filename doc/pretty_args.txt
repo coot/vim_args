@@ -1,0 +1,39 @@
+*pretty_args* pretty :Args commad	Last change: 04 August 2013
+
+This pluginn provides just one command:
+    
+						    *:Args*
+:Args[!] [mods] [newline]
+:Args [newline]
+
+	The [mods] is a |filename-modifier| used to modify the filenames.
+	The default is ":t" (which prints just the basename).  Except of
+	standard |filename-modifier|s there are two additional ones:
+	    :H	prints basefile name together with its parent directory.  If
+		combined with more :H.  If combined with more :H prints more
+		directory componenets of the path.
+	    :S	is using |pathshorten()| to shorten the path.
+	Note that you can combine modifiers as usual, for example ":H:S" is
+	a valid modifier.  It will print "d/pretty_args.txt" where ":H" would
+	print "doc/pretty_args.txt".
+
+							*Args_default_fnamemodifier*
+	The last used [mods] is remmebered and it will be used next time,
+	unless the bang "!" is used.  You can also specify the default
+	modifier in |Args_default_fnamemodifier| variable.  If this is the
+	case it will be used, instead of ":t" when |:Args| is run for the
+	first time.
+
+	|:Args| command is using |hl-Directory| group to highlight the current
+	arg instead of [...] like |:arg| does.
+
+	If [newline] argument is used the each arg is printed in a seprate
+	line.  [newline] can be anything except a string starting with ":"
+	like modifiers do.  This is usefule with the ":p" modifier.
+
+
+There is one public function:
+						    *Fnamemodify()*
+Fnamemodify({fname}, {mods})
+	It works like |fnamemodify()| but also handles the two
+	additional modifiers ":H" and ":S".
