@@ -1,7 +1,6 @@
 " Pretty :Args [filename-modifier]
 " Author: Marcin Szamotulski
 
-let s:vim_modifiers = ['p', '8', '~', '.', 'h', 't', 'r', 'e', 's', 'gs']
 if exists("g:Args_fnamemodifier")
     let s:current_mod = g:Args_fnamemodifier
 else
@@ -15,21 +14,20 @@ fun! Fnamemodify(name, modifier)
     let name = a:name
     let H_mods = ':p:h'
     for mod in mods
-	if index(s:vim_modifiers, mod) != -1
-	    let name = fnamemodify(name, ':'.mod)
-	elseif mod == 'H'
+	if mod == 'H'
 	    let H_mods .= ':h'
 	    let dir = fnamemodify(a:name, H_mods)
 	    let name = fnamemodify(a:name, ':p')
 	    let name = name[len(dir)+1:]
 	elseif mod == 'S'
 	    let name = pathshorten(name)
+	else
+	    let name = fnamemodify(name, ':'.mod)
 	endif
     endfor
     return name
 endfun
 fun! <SID>Args(bang, ...)
-    let g:args = a:000
     let mod = (a:0 ? a:1 : s:current_mod)
     let newlines = (a:0 >= 2 ? "\n" : ' ')
     let bang = a:bang

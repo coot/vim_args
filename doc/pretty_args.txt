@@ -6,30 +6,42 @@ This pluginn provides just one command:
 :Args[!] [mods] [newline]
 :Args [newline]
 
-	The [mods] is a |filename-modifier| used to modify the filenames.
-	The default is ":t" (which prints just the basename).  Except of
+	The [mods] is a |filename-modifier| used to modify the file names.
+	The default is ":t" (which prints just the base name).  Except of
 	standard |filename-modifier|s there are two additional ones:
+						    *%:H* *%:S* *::H* *::S*
 	    :H	prints basefile name together with its parent directory.  If
 		combined with more :H.  If combined with more :H prints more
-		directory componenets of the path.
+		directory components of the path.
 	    :S	is using |pathshorten()| to shorten the path.
 	Note that you can combine modifiers as usual, for example ":H:S" is
 	a valid modifier.  It will print "d/pretty_args.txt" where ":H" would
 	print "doc/pretty_args.txt".
 
-							*Args_default_fnamemodifier*
-	The last used [mods] is remmebered and it will be used next time,
+						    *Args_fnamemodifier*
+	The last used [mods] is remembered and it will be used next time,
 	unless the bang "!" is used.  You can also specify the default
-	modifier in |Args_default_fnamemodifier| variable.  If this is the
+	modifier in |Args_fnamemodifier| variable.  If this is the
 	case it will be used, instead of ":t" when |:Args| is run for the
 	first time.
 
 	|:Args| command is using |hl-Directory| group to highlight the current
 	arg instead of [...] like |:arg| does.
 
-	If [newline] argument is used the each arg is printed in a seprate
+	If [newline] argument is used the each arg is printed in a separate
 	line.  [newline] can be anything except a string starting with ":"
-	like modifiers do.  This is usefule with the ":p" modifier.
+	like modifiers do.  This is useful with the ":p" modifier.
+
+Example: if you want to remove a common path from args, which is the case if
+you work on a project which under "/home/user/project/" directory, you can use
+the following path modifier: >
+    :Args :p:s?^/home/user/project/??
+<or even: >
+    :Args :p:s?^/home/user/project/??:S
+<
+Another tip is useful if the path is long and you do not want to type it.
+Then you can use ^r=expand('%:p:h:h...') in the command line.  Check |^r=| and
+|%:p|, |%:h|.
 
 
 There is one public function:
