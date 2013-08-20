@@ -184,4 +184,12 @@ if !exists("g:Args_nocommands")
     com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
+    if !exists("g:Args_shortcuts") && exists(":CmdAlias") >= 2
+	CmdAlias A\%[rgu] Argu
+	CmdAlias Ar\%[gs] Args
+    elseif !exists("g:Args_shortcuts") 
+	com! -nargs=? -complete=customlist,<SID>Argu_comp A :call <SID>Argu(<f-args>)
+	com! -bang -nargs=* Ar :call <SID>Args(<q-bang>, <f-args>)
+    endif
+    " Todo: Argu should have better completion, like buffer names
 endif
