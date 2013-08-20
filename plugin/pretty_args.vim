@@ -6,6 +6,9 @@ if exists("g:Args_fnamemodifier")
 else
     let s:current_mod = ':t'
 endif
+if !exists("g:Args_fnamemodifier")
+    let g:Args_fnamemodifier = ':t'
+endif
 fun! Fnamemodify(name, modifier)
     " Ads two modifires:
     " :H  - like :h but cuts what :h:h leaves 
@@ -28,16 +31,16 @@ fun! Fnamemodify(name, modifier)
     return name
 endfun
 fun! <SID>Args(bang, ...)
-    let mod = (a:0 ? a:1 : s:current_mod)
+    let mod = (a:0 ? a:1 : g:Args_fnamemodifier)
     let newlines = (a:0 >= 2 ? "\n" : ' ')
     let bang = a:bang
     if mod[0] != ':'
 	let newlines = "\n"
 	let bang = "!"
-	let mod = s:current_mod
+	let mod = g:Args_fnamemodifier
     endif
     if bang != '!'
-	let s:current_mod = mod
+	let g:Args_fnamemodifier = mod
     endif
     let argidx = argidx()
     let argv = argv()
