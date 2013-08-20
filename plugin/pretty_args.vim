@@ -107,6 +107,29 @@ fun! <SID>Arga(count, ...)
 	endif
     endfor
 endfun
+
+fun! <SID>Argd(bang, ...)
+    " Delete files based on file names rather than a pattern
+    "
+    " If bang is used no escaping is done (so a pattern may be used)
+    let files = ( a:0 > 0 ? a:000 : ['%'] )
+    let magic = &l:magic
+    setl magic
+    for file in files
+	if a:bang != '!'
+	    exe "argd" escape(fnamemodify(file, ':p'), '.*/')
+	else
+	    exe "argd" file
+	endif
+    endfor
+    let &l:magic = magic
+endfun
+
+fun! <SID>Arg_comp(ArgLead, CmdLine, CursorPos)
+    return join(map(argv(), 'Fnamemodify(v:val, g:Args_fnamemodifier)'), "\n")
+endfun
+
 if !exists("g:Args_nocommands")
 endif
     com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
+    com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
