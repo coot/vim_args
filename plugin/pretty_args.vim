@@ -1,4 +1,7 @@
 " Pretty :Args [filename-modifier]
+" :Argu
+" :Arga
+" :Argd
 " Author: Marcin Szamotulski
 
 if exists("g:did_prettyargs")
