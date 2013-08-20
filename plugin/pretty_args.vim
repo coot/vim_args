@@ -193,3 +193,6 @@ if !exists("g:Args_nocommands")
     endif
     " Todo: Argu should have better completion, like buffer names
 endif
+if !exists("g:Args_nomaps")
+    nm <Leader>a :call Arga(-1, '%')<cr>
+endif
