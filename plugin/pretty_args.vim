@@ -180,6 +180,7 @@ fun! <SID>Argu_comp(ArgLead, CmdLine, CursorPos)
 endfun
 
 if !exists("g:Args_nocommands")
+    com! -bang -nargs=* Args :call <SID>Args(<q-bang>, <f-args>)
     com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
