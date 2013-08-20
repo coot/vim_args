@@ -83,4 +83,30 @@ fun! <SID>Args(bang, ...)
 	let idx += 1
     endfor
 endfun
-com! -bang -nargs=* Args :call <SID>Args(<q-bang>,<f-args>)
+
+fun! <SID>Arga(count, ...)
+    " Add to arg list or move
+    " without arguments acts like :arga% (add the current file just after the
+    " current argument)
+    let files = ( a:0 > 0 ? a:000 : ['%'])
+    for file in files
+	" just add the file to args
+	let fpath = simplify(resolve(fnamemodify(expand(file), ":p")))
+	let argv = map(argv(), 'resolve(fnamemodify(v:val, ":p"))')
+	if index(argv, fpath) == -1
+	    if a:count >= 0
+		exe a:count "arga" fnameescape(fpath)
+	    else
+		exe "arga" fnameescape(fpath)
+	    endif
+	else
+	    " move the file in args
+	    let argname = argv()[index(argv, fpath)]
+	    exe "argd" fnameescape(argname)
+	    exe a:count "arga" fnameescape(fpath)
+	endif
+    endfor
+endfun
+if !exists("g:Args_nocommands")
+endif
+    com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
