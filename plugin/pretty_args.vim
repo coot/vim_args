@@ -1,11 +1,11 @@
 " Pretty :Args [filename-modifier]
 " Author: Marcin Szamotulski
 
-if exists("g:Args_fnamemodifier")
-    let s:current_mod = g:Args_fnamemodifier
-else
-    let s:current_mod = ':t'
+if exists("g:did_prettyargs")
+    finish
 endif
+let g:did_prettyargs = 1
+
 if !exists("g:Args_fnamemodifier")
     let g:Args_fnamemodifier = ':t'
 endif
