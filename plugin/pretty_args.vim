@@ -254,20 +254,21 @@ fun! <SID>Argu_comp(ArgLead, CmdLine, CursorPos)
 endfun
 
 if !exists("g:Args_nocommands")
-    com! -bang -nargs=* Args :call <SID>Args(<q-bang>, <f-args>)
-    com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
+    com! -nargs=* -bang Args :call <SID>Args(<q-bang>, <f-args>)
+    com! -nargs=* -bang -count=-1 Arga :call <SID>Arga(<q-bang>, <count>, 0, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
     com! -nargs=* -bang -complete=customlist,<SID>Argu_comp Argm :call <SID>Argm(<q-bang>, <f-args>)
-    if !exists("g:Args_shortcuts") && exists(":CmdAlias") >= 2
+    if !exists("g:Args_noaliases") && exists(":CmdAlias") >= 2
 	CmdAlias A\%[rgu] Argu
 	CmdAlias Ar\%[gs] Args
-    elseif !exists("g:Args_shortcuts") 
+    endif
+    if !exists("g:Args_noshortcuts") 
 	com! -nargs=? -complete=customlist,<SID>Argu_comp A :call <SID>Argu(<f-args>)
 	com! -bang -nargs=* Ar :call <SID>Args(<q-bang>, <f-args>)
     endif
     " Todo: Argu should have better completion, like buffer names
 endif
 if !exists("g:Args_nomaps")
-    nm <Leader>a :call Arga(-1, '%')<cr>
+    nm <silent> <Leader>a :call <SID>Arga("", v:count, 1, '%')<cr>
 endif
