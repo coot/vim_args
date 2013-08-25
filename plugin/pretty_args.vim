@@ -53,7 +53,7 @@ fun! <SID>Args(bang, ...)
     if mod[0] != ':'
 	let newlines = (g:Args_vertical == 0 ? "\n" : ' ')
 	let bang = "!"
-	let mod = g:Args_fnamemodifier
+	let mod = fnamemodifier
     endif
     if bang != '!'
 	if exists('w:Args_fnamemodifier')
@@ -72,6 +72,7 @@ fun! <SID>Args(bang, ...)
 	let pname = Fnamemodify(arg_, mod) 
 	if newlines == "\n"
 	    " Show similar info as :ls does
+	    let argnr = idx + 1
 	    let bufnr = bufnr(arg_)
 	    let buflisted = (buflisted(bufnr) ? ' ' : 'u')
 	    let curent = (bufnr == bufnr('%') ? '%' : ( bufnr == bufnr('#') ? '#' : ' '))
@@ -83,7 +84,7 @@ fun! <SID>Args(bang, ...)
 
 	    " let pname = printf('%-31s', '"'.pname.'"')
 	    let pname = '"'.pname.'"'
-	    echon printf("%3d%s%s%s%s%s ", bufnr, buflisted, curent, active, modifiable, modified)
+	    echon printf("%-2d%3d%s%s%s%s%s ", argnr, bufnr, buflisted, curent, active, modifiable, modified)
 	endif
 	if idx == argidx
 	    echohl Directory
