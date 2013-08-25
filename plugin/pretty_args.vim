@@ -134,6 +134,53 @@ fun! <SID>Arga(bang, count, silent, ...)
     endfor
 endfun
 
+fun! <SID>Argm(bang, file, ...)
+    " Move a:file to the end of arglist
+    " if bang is used the index (a:1) is relative to the current position
+    let ind = (a:0>0 ? a:1 : "$")
+    let argv = argv()
+    let _argv = map(argv, 'Fnamemodify(v:val, g:Args_fnamemodifier)')
+    let aind = index(_argv, a:file)
+    if aind == -1
+	let aind = index(argv, a:file)
+    endif
+    if aind == -1
+	echohl ErrorMsg
+	echom 'File did not match any files in the arg list'
+	echohl Normal
+	return
+    endif
+    let argf = argv[aind]
+    call remove(argv, aind)
+    if a:bang == ""
+	if ind < 0
+	    let ind = len(argv) + ind + 1
+	elseif ind == '$'
+	    let ind = len(argv)
+	elseif ind == '^'
+	    let ind = 0
+	else
+	    let ind = ind
+	endif
+    else
+	" relative index
+	let ind = aind + ind
+    endif
+    if ind > len(argv)
+	let ind = len(arv)
+    elseif ind < 0
+	let ind = 0
+    endif
+    call insert(argv, argf, ind)
+    " We do not use :args since it also opens the first file
+    for f in argv()
+	exe 'argd' fnameescape(f)
+    endfor
+    for f in argv
+	exe 'arga' fnameescape(f)
+    endfor
+endfun
+
 fun! <SID>Argd(bang, ...)
     " Delete files based on file names rather than a pattern
     "
@@ -210,6 +257,7 @@ if !exists("g:Args_nocommands")
     com! -nargs=* -range=-1 Arga :call <SID>Arga(<count>, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
+    com! -nargs=* -bang -complete=customlist,<SID>Argu_comp Argm :call <SID>Argm(<q-bang>, <f-args>)
     if !exists("g:Args_shortcuts") && exists(":CmdAlias") >= 2
 	CmdAlias A\%[rgu] Argu
 	CmdAlias Ar\%[gs] Args
