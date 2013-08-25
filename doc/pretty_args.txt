@@ -1,6 +1,7 @@
 *pretty_args* pretty :Args commad	Last change: 04 August 2013
 
-This pluginn provides just one command:
+This pluginn provides a bunch of commands which implements a different
+(complementary) way of |:args|, |:argu|, |:arga| and |:argd| vim commands.
     
 						    *:Args*
 :Args[!] [mods] [newline]
