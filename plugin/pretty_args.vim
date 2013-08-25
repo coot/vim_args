@@ -97,26 +97,39 @@ fun! <SID>Args(bang, ...)
     endfor
 endfun
 
-fun! <SID>Arga(count, ...)
-    " Add to arg list or move
+fun! <SID>Arga(bang, count, silent, ...)
+    " Add to arg list or move when used with a bang.
     " without arguments acts like :arga% (add the current file just after the
     " current argument)
     let files = ( a:0 > 0 ? a:000 : ['%'])
+    let argv = map(argv(), 'resolve(fnamemodify(v:val, ":p"))')
     for file in files
 	" just add the file to args
-	let fpath = simplify(resolve(fnamemodify(expand(file), ":p")))
-	let argv = map(argv(), 'resolve(fnamemodify(v:val, ":p"))')
+	if expand(file) != ''
+	    let fpath = fnamemodify(expand(file), ":p")
+	else
+	    echohl ErrorMsg
+	    echom "E499, Empty file name for '%' or '#'"
+	    echohl Normal
+	    continue
+	endif
 	if index(argv, fpath) == -1
-	    if a:count >= 0
-		exe a:count "arga" fnameescape(fpath)
+	    if (a:count-1) >= 0
+		exe (a:count-1) "arga" fnameescape(fpath)
 	    else
 		exe "arga" fnameescape(fpath)
 	    endif
-	else
+	    if !a:silent
+		echom '"'.file.'" added to the arglist'
+	    endif
+	elseif a:bang == "!"
 	    " move the file in args
 	    let argname = argv()[index(argv, fpath)]
-	    exe "argd" fnameescape(argname)
-	    exe a:count "arga" fnameescape(fpath)
+	    exe "argd" escape(argname, '.*')
+	    exe (a:count-1) "arga" fnameescape(fpath)
+	    if !a:silent
+		echom '"'.expand(file).'" moved in the arglist'
+	    endif
 	endif
     endfor
 endfun
