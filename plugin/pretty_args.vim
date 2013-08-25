@@ -39,7 +39,12 @@ fun! Fnamemodify(name, modifier)
 endfun
 
 fun! <SID>Args(bang, ...)
-    let mod = (a:0 ? a:1 : g:Args_fnamemodifier)
+    if exists('w:Args_fnamemodifier')
+	let fnamemodifier = w:Args_fnamemodifier
+    else
+	let fnamemodifier = g:Args_fnamemodifier
+    endif
+    let mod = (a:0 ? a:1 : fnamemodifier)
     let newlines = (a:0 >= 2 ?
 		\ (g:Args_vertical == 0 ? "\n" : ' ') :
 		\ (g:Args_vertical == 0 ? ' ' : "\n")
@@ -51,7 +56,11 @@ fun! <SID>Args(bang, ...)
 	let mod = g:Args_fnamemodifier
     endif
     if bang != '!'
-	let g:Args_fnamemodifier = mod
+	if exists('w:Args_fnamemodifier')
+	    let w:Args_fnamemodifier = mod
+	else
+	    let g:Args_fnamemodifier = mod
+	endif
     endif
     let argidx = argidx()
     let argv = argv()
