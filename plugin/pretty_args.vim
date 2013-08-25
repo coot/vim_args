@@ -205,8 +205,7 @@ fun! <SID>Arg_comp(ArgLead, CmdLine, CursorPos)
 endfun
 
 fun! <SID>Argu(...)
-    let fname = (a:0 >= 1 ? a:1 : bufname('%'))
-    let g:fname = fname
+    let fname = (a:0 >= 1 ? a:1 : '')
     if match(fname, '^\d\+$') == 0
 	" be compatible with :argu
 	let ind = fname+0
