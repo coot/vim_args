@@ -187,10 +187,12 @@ fun! <SID>Argd(bang, ...)
     " If bang is used no escaping is done (so a pattern may be used)
     let files = ( a:0 > 0 ? a:000 : ['%'] )
     let magic = &l:magic
-    setl magic
     for file in files
+	if file == ''
+	    continue
+	endif
 	if a:bang != '!'
-	    exe "argd" escape(fnamemodify(file, ':p'), '.*/')
+	    exe "argd" escape(file, '.*/')
 	else
 	    exe "argd" file
 	endif
