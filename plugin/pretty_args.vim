@@ -114,8 +114,8 @@ fun! <SID>Arga(bang, count, silent, ...)
 	    continue
 	endif
 	if index(argv, fpath) == -1
-	    if (a:count-1) >= 0
-		exe (a:count-1) "arga" fnameescape(fpath)
+	    if (a:count) >= 0
+		exe (a:count) "arga" fnameescape(fpath)
 	    else
 		exe "arga" fnameescape(fpath)
 	    endif
@@ -126,7 +126,7 @@ fun! <SID>Arga(bang, count, silent, ...)
 	    " move the file in args
 	    let argname = argv()[index(argv, fpath)]
 	    exe "argd" escape(argname, '.*')
-	    exe (a:count-1) "arga" fnameescape(fpath)
+	    exe (a:count) "arga" fnameescape(fpath)
 	    if !a:silent
 		echom '"'.expand(file).'" moved in the arglist'
 	    endif
@@ -147,9 +147,9 @@ fun! <SID>Argm(bang, ...)
     endif
     let file = (a:0>=2 ? a:1 : "%")
     if a:0 >= 2
-	let ind = a:2-1
+	let ind = a:2
     else
-	let ind = a:1-1
+	let ind = a:1
     endif
     let argv = argv()
     let _argv = map(argv(), 'Fnamemodify(v:val, g:Args_fnamemodifier)')
