@@ -134,15 +134,32 @@ fun! <SID>Arga(bang, count, silent, ...)
     endfor
 endfun
 
-fun! <SID>Argm(bang, file, ...)
+fun! <SID>Argm(bang, ...)
     " Move a:file to the end of arglist
     " if bang is used the index (a:1) is relative to the current position
-    let ind = (a:0>0 ? a:1 : "$")
+    " Argm [file] idx
+    " if [file] is ommited argidx() is used
+    if a:0 == 0
+	echohl ErrorMsg
+	echo ':Argm [argfile] ind, at least ind is required'
+	echohl Normal
+	return
+    endif
+    let file = (a:0>=2 ? a:1 : "%")
+    if a:0 >= 2
+	let ind = a:2-1
+    else
+	let ind = a:1-1
+    endif
     let argv = argv()
-    let _argv = map(argv, 'Fnamemodify(v:val, g:Args_fnamemodifier)')
-    let aind = index(_argv, a:file)
+    let _argv = map(argv(), 'Fnamemodify(v:val, g:Args_fnamemodifier)')
+    if file != '%'
+	let aind = index(_argv, file)
+    else
+	let aind = argidx()
+    endif
     if aind == -1
-	let aind = index(argv, a:file)
+	let aind = index(argv, file)
     endif
     if aind == -1
 	echohl ErrorMsg
