@@ -44,6 +44,33 @@ Another tip is useful if the path is long and you do not want to type it.
 Then you can use ^r=expand('%:p:h:h...') in the command line.  Check |^r=| and
 |%:p|, |%:h|.
 
+						    *:Argu*
+:Argu [file]
+    This command acts like |:argu| but beside a number it accepts argpath
+    argument, i.e. an element as displayed by |:Args| using
+    |g:Args_fnamemodifier|.  [file] can be completed. 
+
+						    *:Arga*
+:[count]Arga[!] [name] ..
+nmap \a
+
+    This command acts like |:arga| with the only difference that you can ommit
+    the [name].  If this is the case the current buffer will be added, i.e.
+    this is equivalent to |:arga%|, but it is easier to type. There is also
+    a normal mode map for that.
+
+    The difference from |:arga| is that it will not add a file if it is
+    already present in the |arglist|.  If you use bang "!", and the [name] is
+    in the |arglist| it will be moved where [count] suggest.
+
+
+						    *:Argm*
+:Argm [file] {ind}
+
+    Move [file] to {ind} in |arglist|.  If [file] is not given then the
+    current active argument is used (as highlighted by |:args| or |:Args|, see
+    |argidx()|).
+
 
 There is one public function:
 						    *Fnamemodify()*
