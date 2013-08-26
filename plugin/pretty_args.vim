@@ -272,7 +272,7 @@ endfun
 
 if !exists("g:Args_nocommands")
     com! -nargs=* -bang Args :call <SID>Args(<q-bang>, <f-args>)
-    com! -nargs=* -bang -count=-1 Arga :call <SID>Arga(<q-bang>, <count>, 0, <f-args>)
+    com! -nargs=* -bang -count=-1 -complete=file Arga :call <SID>Arga(<q-bang>, <count>, 0, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
     com! -nargs=* -bang -complete=customlist,<SID>Argu_comp Argm :call <SID>Argm(<q-bang>, <f-args>)
