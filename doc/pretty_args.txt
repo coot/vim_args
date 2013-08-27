@@ -63,6 +63,17 @@ nmap \a
     already present in the |arglist|.  If you use bang "!", and the [name] is
     in the |arglist| it will be moved where [count] suggest.
 
+    Implementation detail: [count] 987654321 is the default count which makes
+    it possible to implement |:Arga| the way |:arga| works. If it happens that
+    you need 987654321 files in |arglist| ... ;)
+
+						    *:Argd*
+:Argd[!] [file]
+    Acts like *:argd*, but [file] is a file rather than file pattarn.  Without
+    bang it prepends '*' to [file], if [file] is not given the current file
+    will be removed, like '|:argd|%'.  With bang "!" it acts just like |:argd|
+    (no '*' added, no escaping of |file-pattern| special literals).  The main
+    difference from |:argd| is that [file] can be completed.
 
 						    *:Argm*
 :Argm [file] {ind}
