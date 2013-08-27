@@ -114,13 +114,13 @@ fun! <SID>Arga(bang, count, silent, ...)
 	    continue
 	endif
 	if index(argv, fpath) == -1
-	    if (a:count) >= 0
+	    if (a:count) != 987654321098
 		exe (a:count) "arga" fnameescape(fpath)
 	    else
 		exe "arga" fnameescape(fpath)
 	    endif
 	    if !a:silent
-		echom '"'.file.'" added to the arglist'
+		echom '"'.expand(file).'" added to the arglist'
 	    endif
 	elseif a:bang == "!"
 	    " move the file in args
@@ -270,7 +270,10 @@ endfun
 
 if !exists("g:Args_nocommands")
     com! -nargs=* -bang Args :call <SID>Args(<q-bang>, <f-args>)
-    com! -nargs=* -bang -count=-1 -complete=file Arga :call <SID>Arga(<q-bang>, <count>, 0, <f-args>)
+    " the -count=987654321 is a hack for a default value outside of the usual
+    " scope, one cannot use -count=-1.  This is needed for compatibility with
+    " :arga command
+    com! -nargs=* -bang -count=987654321 -complete=file Arga :call <SID>Arga(<q-bang>, <count>, 0, <f-args>)
     com! -nargs=* -complete=custom,<SID>Arg_comp Argd :call <SID>Argd(<q-bang>, <f-args>)
     com! -nargs=? -complete=customlist,<SID>Argu_comp Argu :call <SID>Argu(<f-args>)
     com! -nargs=* -bang -complete=customlist,<SID>Argu_comp Argm :call <SID>Argm(<q-bang>, <f-args>)
