@@ -203,18 +203,16 @@ fun! <SID>Argd(bang, ...)
     "
     " If bang is used no escaping is done (so a pattern may be used)
     let files = ( a:0 > 0 ? a:000 : ['%'] )
-    let magic = &l:magic
     for file in files
 	if file == ''
 	    continue
 	endif
-	if a:bang != '!'
-	    exe "argd" escape(file, '.*/')
+	if !(a:bang != '!' ||  file != '%')
+	    exe "argd" '*'.escape(file, '*{}?\[]')
 	else
 	    exe "argd" file
 	endif
     endfor
-    let &l:magic = magic
 endfun
 
 fun! <SID>Arg_comp(ArgLead, CmdLine, CursorPos)
