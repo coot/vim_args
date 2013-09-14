@@ -1,0 +1,40 @@
+diff -r a83960ec9e6d -r c535a1c9985e src/eval.c
+--- a/src/eval.c	Sun Sep 08 20:00:48 2013 +0200
++++ b/src/eval.c	Sat Sep 14 22:25:44 2013 +0100
+@@ -459,6 +459,7 @@
+ static void f_append __ARGS((typval_T *argvars, typval_T *rettv));
+ static void f_argc __ARGS((typval_T *argvars, typval_T *rettv));
+ static void f_argidx __ARGS((typval_T *argvars, typval_T *rettv));
++static void f_argisglobal __ARGS((typval_T *argvars, typval_T *rettv));
+ static void f_argv __ARGS((typval_T *argvars, typval_T *rettv));
+ #ifdef FEAT_FLOAT
+ static void f_asin __ARGS((typval_T *argvars, typval_T *rettv));
+@@ -7841,6 +7842,7 @@
+     {"append",		2, 2, f_append},
+     {"argc",		0, 0, f_argc},
+     {"argidx",		0, 0, f_argidx},
++    {"argglobal",	0, 0, f_argisglobal},
+     {"argv",		0, 1, f_argv},
+ #ifdef FEAT_FLOAT
+     {"asin",		1, 1, f_asin},	/* WJMc */
+@@ -8814,6 +8816,20 @@
+ }
+ 
+ /*
++ * "argisglobal()" function
++ */
++    static void
++f_argisglobal(argvars, rettv)
++    typval_T	*argvars UNUSED;
++    typval_T	*rettv;
++{
++    if (curwin->w_alist == &global_alist)
++	rettv->vval.v_number = 1;
++    else
++	rettv->vval.v_number = 0;
++}
++
++/*
+  * "argv(nr)" function
+  */
+     static void

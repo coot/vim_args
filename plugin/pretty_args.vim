@@ -38,25 +38,38 @@ fun! Fnamemodify(name, modifier)
     return name
 endfun
 
+fun! <SID>ArgIsGlobal()
+    if exists('*argisglobal')
+	return argisglobal()
+    else
+	return exists('w:Args_fnamemodifier')
+    endif
+endfun
+
 fun! <SID>Args(bang, ...)
-    if exists('w:Args_fnamemodifier')
+    if !<SID>ArgIsGlobal() && exists('w:Args_fnamemodifier')
 	let fnamemodifier = w:Args_fnamemodifier
     else
 	let fnamemodifier = g:Args_fnamemodifier
     endif
+    if !<SID>ArgIsGlobal() && exists('w:Args_vertical')
+	let Args_vertical = w:Args_vertical
+    else
+	let Args_vertical = g:Args_vertical
+    endif
     let mod = (a:0 ? a:1 : fnamemodifier)
     let newlines = (a:0 >= 2 ?
-		\ (g:Args_vertical == 0 ? "\n" : ' ') :
-		\ (g:Args_vertical == 0 ? ' ' : "\n")
+		\ (Args_vertical == 0 ? "\n" : ' ') :
+		\ (Args_vertical == 0 ? ' ' : "\n")
 		\ )
     let bang = a:bang
     if mod[0] != ':'
-	let newlines = (g:Args_vertical == 0 ? "\n" : ' ')
+	let newlines = (Args_vertical == 0 ? "\n" : ' ')
 	let bang = "!"
 	let mod = fnamemodifier
     endif
     if bang != '!'
-	if exists('w:Args_fnamemodifier')
+	if !<SID>ArgIsGlobal()
 	    let w:Args_fnamemodifier = mod
 	else
 	    let g:Args_fnamemodifier = mod
@@ -284,6 +297,11 @@ if !exists("g:Args_nocommands")
     if !exists("g:Args_noshortcuts") 
 	com! -nargs=? -complete=customlist,<SID>Argu_comp A :call <SID>Argu(<f-args>)
 	com! -bang -nargs=* Ar :call <SID>Args(<q-bang>, <f-args>)
+    endif
+    if !exists('*argisglobal')
+	" vim is not compiled with patch/arg.patch
+	com! Argg :silent! unlet w:Args_fnamemodifier<bar>argg
+	com! Argl :let w:Args_fnamemodifier = g:Args_fnamemodifier<bar>argl
     endif
     " Todo: Argu should have better completion, like buffer names
 endif

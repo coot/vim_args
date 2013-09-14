@@ -33,6 +33,16 @@ This pluginn provides a bunch of commands which implements a different
 	line.  [newline] can be anything except a string starting with ":"
 	like modifiers do.  This is useful with the ":p" modifier.
 
+	When you compile vim with path (patch/arg.patch) the |:Args| command
+	will now if it has to use global |Args_fnamemodifier| variable or
+	|w:Args_fnamemodifier| variable.  In this way you can use seprate
+	modifiers for local and global list.  If you don't use this patch,
+	|w:Args_fnamemodifier| variable is used whenever it is found.  In this
+	case you can use this commands (they will be defined): >
+	    :com! Argg :silent! unlet w:Args_fnamemodifier<bar>argg
+	    :com! Argl :let w:Args_fnamemodifier = g:Args_fnamemodifier<bar>argl
+<
+
 Example: if you want to remove a common path from args, which is the case if
 you work on a project which under "/home/user/project/" directory, you can use
 the following path modifier: >
