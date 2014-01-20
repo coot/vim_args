@@ -87,7 +87,6 @@ nmap \a
 
 						    *:Argm*
 :Argm [file] {ind}
-
     Move [file] to {ind} in |arglist|.  If [file] is not given then the
     current active argument is used (as highlighted by |:args| or |:Args|, see
     |argidx()|).
