@@ -197,7 +197,7 @@ fun! <SID>Argm(bang, ...)
 	let ind = aind + ind
     endif
     if ind > len(argv)
-	let ind = len(arv)
+	let ind = len(argv)
     elseif ind < 0
 	let ind = 0
     endif
